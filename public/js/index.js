@@ -123,6 +123,8 @@ const DOM = {
 
         
 
+        
+
         DOM.transactionsContainer.appendChild(tr)
     },
 
