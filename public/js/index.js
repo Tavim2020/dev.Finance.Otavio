@@ -93,6 +93,8 @@ const DOM = {
         tr.innerHTML = DOM.innerHTMLTransaction(transactions, index);
 
         tr.dataset.index = index;
+
+        
         
         
         tr.addEventListener('click', ()=>{
@@ -121,7 +123,7 @@ const DOM = {
 
         }),
 
-        
+
 
         
 
