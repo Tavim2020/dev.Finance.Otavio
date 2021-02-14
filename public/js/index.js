@@ -13,6 +13,7 @@ aActive.addEventListener("click", ()=>{
     buttonAtualiza.classList.add('hidden');
     buttonSave.disabled = false;
     buttonSave.style.display = 'initial';
+    
 })
 
 
