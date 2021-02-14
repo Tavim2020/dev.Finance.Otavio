@@ -3,9 +3,16 @@
 var aActive = document.querySelector("#new-transation")
 var aCancelModal = document.querySelector('.cancel');
 var modal = document.querySelector(".modal-overlay");
+var buttonAtualiza = document.querySelector("#atualizacao");
+var buttonSave = document.querySelector('#salvar');
+
 
 aActive.addEventListener("click", ()=>{
     modal.classList.add('active');
+
+    buttonAtualiza.classList.add('hidden');
+    buttonSave.disabled = false;
+    buttonSave.style.display = 'initial';
 })
 
 
@@ -24,7 +31,6 @@ const Storage = {
 }
 
 // Eu preciso somar as entradas
-
 var Transaction = {
     all: Storage.get(),
 
@@ -36,7 +42,6 @@ var Transaction = {
 
     remove(index){
         Transaction.all.splice(index, 1)
-
         App.reload();
     },
 
@@ -56,6 +61,7 @@ var Transaction = {
         return income;
     },
 
+   
     expenses(){
         let expense = 0
         // pegar todas as transações
@@ -73,18 +79,48 @@ var Transaction = {
 
     total(){
         return Transaction.incomes() + Transaction.expenses()
-    }
+    },
 }
 
-// Substituir os dados do HTML com os dados do JS
 
+// Substituir os dados do HTML com os dados do JS
 const DOM = {
     transactionsContainer: document.querySelector('#data-table tbody'),
-
+    
     addTransaction(transactions, index){
         const tr = document.createElement('tr');
-        tr.innerHTML = DOM.innerHTMLTransaction(transactions, index)
+        tr.innerHTML = DOM.innerHTMLTransaction(transactions, index);
+
         tr.dataset.index = index;
+        
+        
+        tr.addEventListener('click', ()=>{
+            var getIndex = event.target.parentNode.dataset.index;
+            var DescriptionValues = Transaction.all[getIndex].description;
+            var AmountValues = Transaction.all[getIndex].amount;
+            var InputDescription = document.querySelector("#description");
+            var InputAmount = document.querySelector('#amount');
+            var InputDate = document.querySelector("date");
+           
+            modal.classList.add('active');
+           
+            InputDescription.value = DescriptionValues;
+            InputAmount.value = (AmountValues / 100);
+
+            console.log(getIndex);
+          
+            buttonAtualiza.classList.remove('hidden');
+            buttonSave.disabled = true;
+
+            buttonSave.style.display = 'none';
+            buttonAtualiza.addEventListener('click', ()=>{
+                event.preventDefault();
+                console.log(getIndex);
+            })
+
+        }),
+
+        
 
         DOM.transactionsContainer.appendChild(tr)
     },
@@ -92,7 +128,7 @@ const DOM = {
     innerHTMLTransaction(transactions, index){
         const CSSclass = transactions.amount > 0 ? 'income' : 'expense'
 
-        const amount = Utils.formatCurrency(transactions.amount)
+        const amount = Utils.formatCurrency(transactions.amount);
 
         const html = 
         `
@@ -192,6 +228,7 @@ const Form = {
         Form.amount.value = "";
         Form.date.value = "";
     },
+
     submit(event){
         event.preventDefault();
 

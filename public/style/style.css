@@ -219,6 +219,12 @@ td.expense{
     color: var(--color-expense-red);
 }
 
+.hidden{
+    display: none;
+}
+
+
+
 /* Modal-overlay ====== */
 .modal-overlay{
     width: 100%;
