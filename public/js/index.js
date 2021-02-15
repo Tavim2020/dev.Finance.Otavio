@@ -359,13 +359,14 @@ window.addEventListener('load', ()=>{
     if(windowScreen < 800){
         var amount = document.querySelector('#amount');
         amount.setAttribute("type", "text");
-        amount.addEventListener("focus", ()=>{
-            setInterval(()=>{
+        amount.addEventListener("focus", function formatCel(){
+            
                 var formatAmoutValue = amount.value.replace(/[a-z]/g, "");
                  console.log(formatAmoutValue)
                  amount.value = formatAmoutValue;
 
-            }, 10)
+                 formatCel();
+        
         })
 
     }
