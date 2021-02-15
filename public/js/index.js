@@ -6,7 +6,6 @@ var modal = document.querySelector(".modal-overlay");
 var buttonAtualiza = document.querySelector("#atualizacao");
 var buttonSave = document.querySelector('#salvar');
 
-
 aActive.addEventListener("click", ()=>{
     modal.classList.add('active');
 
@@ -20,6 +19,16 @@ aActive.addEventListener("click", ()=>{
 
 aCancelModal.addEventListener("click", ()=>{
     modal.classList.remove('active');
+
+    var description = document.querySelector('#description');
+    var amount = document.querySelector('#amount');
+    var date = document.querySelector("#date");
+
+    description.value = "";
+    amount.value = "";
+    date.value = "";
+
+    App.reload();
 })
 
 const Storage = {
@@ -44,6 +53,96 @@ var Transaction = {
     remove(index){
         Transaction.all.splice(index, 1)
         App.reload();
+    },
+
+    clicked(){
+        var divConfirm = document.querySelector('.confirm');
+        var main = document.querySelector("main");
+        var header = document.querySelector("header");
+        var modalOverlay = document.querySelector(".modal-overlay")
+        var footer = document.querySelector('footer');
+
+        var getIndex = event.target.parentNode.parentNode.dataset.index;
+
+        divConfirm.classList.remove('hidden');
+        main.style.opacity = '0.05';
+        header.style.opacity = '0.05';
+        modalOverlay.style.opacity = '0.05';
+        footer.style.opacity = '0.05';
+
+        var buttonSim = document.querySelector('#sim');
+
+        buttonSim.addEventListener('click', ()=>{
+        modal.classList.add('active');
+
+        main.style.opacity = '1';
+        header.style.opacity = '1';
+        modalOverlay.style.opacity = '1';
+        footer.style.opacity = '1';
+
+
+        divConfirm.classList.add('hidden');
+
+        buttonSave.style.display = 'none';
+
+        buttonAtualiza.classList.remove('hidden');
+
+        var inputDescription = document.querySelector('input#description');
+
+        var inputAmount = document.querySelector('input#amount');
+        
+        var inputDate = document.querySelector('#date');
+
+
+        var DescriptionValues = Transaction.all[getIndex].description;
+        var AmountValues = Transaction.all[getIndex].amount;
+        var DateValues = Transaction.all[getIndex].date;
+        inputDescription.value = DescriptionValues;
+        inputAmount.value = (AmountValues / 100);
+
+        
+        var formatDateSplited = DateValues.split('/');
+        
+        var formatDate = `${formatDateSplited[2]}-${formatDateSplited[1]}-${formatDateSplited[0]}`;
+        
+        inputDate.value = formatDate;
+        
+        Transaction.all.splice(getIndex, 1);
+        App.reload();
+        getIndex = "";
+        
+        });
+
+        var buttonNao = document.querySelector("#nao");
+
+        buttonNao.addEventListener('click',()=>{
+            divConfirm.classList.add('hidden');
+
+            main.style.opacity = '1';
+            header.style.opacity = '1';
+            modalOverlay.style.opacity = '1';
+            footer.style.opacity = '1';
+
+            getIndex = ""
+        })
+
+
+    },
+    change(){
+        setInterval(()=>{
+        var total = document.querySelector('#totalDisplay');
+        var divTotal = document.querySelector(".card.total");
+
+        splitTotal = total.innerHTML.split('R$&nbsp;');
+       
+            
+            if(splitTotal[0] == '-'){
+                divTotal.style.backgroundColor = '#e92929';
+            }
+            else{
+                divTotal.style.backgroundColor = '#49aa26';
+            }
+        }, 100)
     },
 
     incomes(){
@@ -91,42 +190,7 @@ const DOM = {
     addTransaction(transactions, index){
         const tr = document.createElement('tr');
         tr.innerHTML = DOM.innerHTMLTransaction(transactions, index);
-
         tr.dataset.index = index;
-
-        
-        
-        
-        tr.addEventListener('click', ()=>{
-            var getIndex = event.target.parentNode.dataset.index;
-            var DescriptionValues = Transaction.all[getIndex].description;
-            var AmountValues = Transaction.all[getIndex].amount;
-            var InputDescription = document.querySelector("#description");
-            var InputAmount = document.querySelector('#amount');
-            var InputDate = document.querySelector("date");
-           
-            modal.classList.add('active');
-           
-            InputDescription.value = DescriptionValues;
-            InputAmount.value = (AmountValues / 100);
-
-            console.log(getIndex);
-          
-            buttonAtualiza.classList.remove('hidden');
-            buttonSave.disabled = true;
-
-            buttonSave.style.display = 'none';
-            buttonAtualiza.addEventListener('click', ()=>{
-                event.preventDefault();
-                console.log(getIndex);
-            })
-
-        }),
-
-
-
-        
-
         DOM.transactionsContainer.appendChild(tr)
     },
 
@@ -135,11 +199,16 @@ const DOM = {
 
         const amount = Utils.formatCurrency(transactions.amount);
 
+
         const html = 
         `
             <td class="description">${transactions.description}</td>
             <td class="${CSSclass}">${amount}</td>
             <td class="date">${transactions.date}</td>
+
+            <td>
+                <button id="button-edit" onclick="Transaction.clicked()">edit</button>
+            </td>
             <td>
                 <img onclick="Transaction.remove(${index})" src="./public/assets/minus.svg" alt="Remover Transação">
             </td>
@@ -279,5 +348,5 @@ const App = {
 App.init()
 
 
-
+Transaction.change();
 
