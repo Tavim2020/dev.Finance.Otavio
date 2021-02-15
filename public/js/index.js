@@ -230,8 +230,10 @@ const DOM = {
 
 const Utils = {
     formatAmount(value){   
+        // var windowScreen = window.screen.width;
+        // if(windowScreen < 800){
         // value = value.replace(/\,?\.?/g, "");
-        
+        // }
         value = Number(value) * 100;
 
         return Math.round(value)
@@ -349,4 +351,22 @@ App.init()
 
 
 Transaction.change();
+
+
+var windowScreen = window.screen.width;
+
+window.addEventListener('load', ()=>{
+    if(windowScreen < 800){
+        var amount = document.querySelector('#amount');
+        amount.setAttribute("type", "text");
+        amount.addEventListener("keyup", ()=>{
+           var formatAmoutValue = amount.value.replace(/[a-z]/g, "");
+            console.log(formatAmoutValue)
+            amount.value = formatAmoutValue;
+            
+            
+        })
+
+    }
+})
 
