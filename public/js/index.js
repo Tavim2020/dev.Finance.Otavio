@@ -359,12 +359,13 @@ window.addEventListener('load', ()=>{
     if(windowScreen < 800){
         var amount = document.querySelector('#amount');
         amount.setAttribute("type", "text");
-        amount.addEventListener("keyup", ()=>{
-           var formatAmoutValue = amount.value.replace(/[a-z]/g, "");
-            console.log(formatAmoutValue)
-            amount.value = formatAmoutValue;
-            
-            
+        amount.addEventListener("focus", ()=>{
+            setInterval(()=>{
+                var formatAmoutValue = amount.value.replace(/[a-z]/g, "");
+                 console.log(formatAmoutValue)
+                 amount.value = formatAmoutValue;
+
+            }, 10)
         })
 
     }
