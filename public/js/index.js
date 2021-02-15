@@ -357,16 +357,13 @@ var windowScreen = window.screen.width;
 
 window.addEventListener('load', ()=>{
     if(windowScreen < 800){
-        var amount = document.querySelector('#amount');
-        amount.setAttribute("type", "text");
-        amount.addEventListener("focus", function formatCel(){
-            
-                var formatAmoutValue = amount.value.replace(/[a-z]/g, "");
-                 console.log(formatAmoutValue)
-                 amount.value = formatAmoutValue;
+        var divida = document.querySelector('#divida');
 
-                 formatCel();
-        
+        divida.addEventListener('click', ()=>{
+            event.preventDefault();
+            var newAmount = amount.value;
+            var negativo = '-' + newAmount;
+            amount.value = negativo;
         })
 
     }

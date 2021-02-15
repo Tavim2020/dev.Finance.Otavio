@@ -294,10 +294,19 @@ td.expense{
 .modal{
     background-color: var(--background-primary-color);
     padding: 2.4rem;
-
+    
     position: relative;
     z-index: 1;
 } 
+
+#divida{
+    background-Color: var(--color-expense-red);
+}
+
+#divida:hover{
+    background-color: #e27e7e;
+}
+
 
 
 /* Form ====== */
@@ -320,6 +329,8 @@ input{
 .input-group{
     margin-top: 0.8rem;
 }
+
+
 
 .input-group small{
     opacity: 0.4;
@@ -380,6 +391,11 @@ footer{
         align-items: center;
         justify-content: center;
         flex-direction: row;
+    }
+    
+
+    #divida{
+        display: none;
     }
     
     #sim{
